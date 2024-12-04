@@ -54,7 +54,7 @@ def query_models(args):
     except FileNotFoundError as e:
         print(f"Error: {e}")
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+        print(f"An unexpected error occurred (Are you loading .pk1 files and the correct scaler?): {e}")
 
 # Main flow to build arguments and run the models
 if __name__ == '__main__':
