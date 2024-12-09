@@ -2,7 +2,6 @@ import argparse
 import onnxruntime as ort
 import numpy as np
 import pandas as pd
-import joblib
 import random
 import os
 
@@ -13,48 +12,53 @@ ort.set_seed(42)
 
 # Function to build the arguments
 def build_args():
-    parser = argparse.ArgumentParser(description="Run inference on an ONNX model.")
-    parser.add_argument('-m', '--model_path', type=str, required=True, help='Path to the ONNX model')
-    parser.add_argument('-s', '--scaler_path', type=str, required=True, help='Path to the scaler file')
+    parser = argparse.ArgumentParser(description="Run inference on ONNX models for K1 and K2.")
+    parser.add_argument('-k1', '--k1_model_path', type=str, required=True, help='Path to the ONNX model for K1')
+    parser.add_argument('-k2', '--k2_model_path', type=str, required=True, help='Path to the ONNX model for K2')
     parser.add_argument('-W', '--sensor_width', type=float, required=True, help='Sensor width parameter value')
     parser.add_argument('-H', '--sensor_height', type=float, required=True, help='Sensor height parameter value')
     parser.add_argument('-d', '--distance', type=float, required=True, help='Distance parameter value')
-    parser.add_argument('--device', type=str, default='cpu', choices=['cpu', 'cuda'], help='Device to run the model on')
+    parser.add_argument('--device', type=str, default='cpu', choices=['cpu', 'cuda'], help='Device to run the models on')
     return parser.parse_args()
 
-# Function to query the model
-def query_model(args):
+# Function to query the models
+def query_models(args):
     try:
-        # Load the StandardScaler
-        if not os.path.exists(args.scaler_path):
-            raise FileNotFoundError(f"Scaler file not found: {args.scaler_path}")
-        scaler = joblib.load(args.scaler_path)
+        # Load ONNX model sessions
+        for model_path in [args.k1_model_path, args.k2_model_path]:
+            if not os.path.exists(model_path):
+                raise FileNotFoundError(f"Model file not found: {model_path}")
 
-        # Load ONNX model session
         providers = ['CUDAExecutionProvider'] if args.device == 'cuda' else ['CPUExecutionProvider']
-        session = ort.InferenceSession(args.model_path, providers=providers)
+
+        # Load sessions for K1 and K2
+        k1_session = ort.InferenceSession(args.k1_model_path, providers=providers)
+        k2_session = ort.InferenceSession(args.k2_model_path, providers=providers)
 
         # Create input DataFrame with feature names
         input_data = pd.DataFrame([[args.sensor_width, args.sensor_height, args.distance]], 
                                   columns=['SensorW', 'SensorH', 'Distance'], dtype=np.float32)
 
-        # Scale input data
-        scaled_input_data = scaler.transform(input_data).astype(np.float32)
+        # Run inference for K1
+        k1_inputs = {k1_session.get_inputs()[0].name: input_data.values.astype(np.float32)}
+        k1_outs = k1_session.run(None, k1_inputs)
+        k1_prediction = k1_outs[0][0]
 
-        # Run inference
-        ort_inputs = {session.get_inputs()[0].name: scaled_input_data}
-        ort_outs = session.run(None, ort_inputs)
-        predicted_values = ort_outs[0]
+        # Run inference for K2
+        k2_inputs = {k2_session.get_inputs()[0].name: input_data.values.astype(np.float32)}
+        k2_outs = k2_session.run(None, k2_inputs)
+        k2_prediction = k2_outs[0][0]
 
-        # Print result
-        print(f'Predicted values (K1, K2): {predicted_values[0]}')
+        # Print results
+        print(f'Predicted value for K1: {k1_prediction}')
+        print(f'Predicted value for K2: {k2_prediction}')
 
     except FileNotFoundError as e:
         print(f"Error: {e}")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
 
-# Main flow to build arguments and run the model
+# Main flow to build arguments and run the models
 if __name__ == '__main__':
     args = build_args()
-    query_model(args)
+    query_models(args)
