@@ -23,16 +23,19 @@ Use machine learning to predict [lens distortion](https://en.wikipedia.org/wiki/
 - SONY Venice 2
 
 ## Requirements
-To train or run inference on the ONNX models from the command line you'll need [Python 3](https://www.python.org/downloads/) and some libraries.
+To train or run inference on the ONNX models from the command line, you'll need [Python 3](https://www.python.org/downloads/) and some libraries.
 
 `python3 -m pip install -r requirements.txt`
+
+## Quality
+I'm no data scientist. Graphs of the predictions can be found near the bottom of the [notebook](Camflex.ipynb). Some are better than others. I was inspired to help out VFX artists who had plates and camera data - but no grids. Typically, you'd film the distortion grids and run them through something like [3DE](https://www.3dequalizer.com/) to get the highest quality results.
 
 ## Try out the models from the command line
 You can find the trained ONNX models in the `models` subdirectory. Run this to get help.
 
 `python3 PredictDistortion.py`
 
-To predict distortion values *K1* and *K2* you need to provide a camera's sensor-width and sensor-height in **CENTIMETERS**. Plus, you must provide the depth in **METERS**.
+To predict distortion values *K1* and *K2*, you need to provide a camera's sensor width and sensor height in **CENTIMETERS**. Plus, you must provide the depth in **METERS**.
 
 ### Predict distortion example
 `python3 PredictDistortion.py -k1 .\models\ARRI-ZEISS_Master_012mm_model_k1.onnx -k2 .\models\ARRI-ZEISS_Master_012mm_model_k2.onnx -W 1.35 -H 1 -d 4`
@@ -43,7 +46,7 @@ The data is housed in a [private repository](https://github.com/pinkwerks/camfle
 Special thanks to [Andy Davis](https://imag4media.com/) for collecting, organizing, and supplying the initial data that inspired me to try this.
 
 ### Working with the data submodule (assuming you have permission)
-After cloning this repo you can get the camflex-data submodule like this:
+After cloning this repo, you can get the camflex-data submodule like this:
 
 `git submodule update --init --recursive`
 
