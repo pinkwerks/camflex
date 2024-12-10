@@ -1,5 +1,4 @@
 # Camflex
-
 Use machine learning to predict [lens distortion](https://en.wikipedia.org/wiki/Distortion_(optics)) parameters for lenses used in motion picture photography.
 
 ## Lenses sampled
@@ -23,23 +22,27 @@ Use machine learning to predict [lens distortion](https://en.wikipedia.org/wiki/
 - SONY F65
 - SONY Venice 2
 
-## Trying the models
-You can find the trained ONNX models in the `models` subdirectory.
+## Requirements
+To train or run inference on the ONNX models from the command line you'll need [Python 3](https://www.python.org/downloads/) and some libraries.
 
-`python run-onnx.py` 
+`python3 -m pip install -r requirements.txt`
 
-To predict distortion values K1 and K2 you need to proved a camera's sensor width and sensor height in **CENTIMETERS**. Plus, you must proved the depth in **METERS**
+## Try out the models from the command line
+You can find the trained ONNX models in the `models` subdirectory. Run this to get help.
 
-### run-python.py example
-`python run-onnx.py -k1 .\models\ARRI-ZEISS_Master_012mm_model_k1.onnx -k2 .\models\ARRI-ZEISS_Master_012mm_model_k2.onnx -W 1.35 -H 1 -d 4`
+`python3 run-onnx.py`
+
+To predict distortion values *K1* and *K2* you need to provide a camera's sensor-width and sensor-height in **CENTIMETERS**. Plus, you must provide the depth in **METERS**.
+
+### run-onnx.py example
+`python3 run-onnx.py -k1 .\models\ARRI-ZEISS_Master_012mm_model_k1.onnx -k2 .\models\ARRI-ZEISS_Master_012mm_model_k2.onnx -W 1.35 -H 1 -d 4`
 
 ## Data
-
-The data is housed in a [private repository](https://github.com/pinkwerks/camflex-data) for now. However, a PDF with graphs of the data is availabe in the file `lens_analysis.pdf`.
+The data is housed in a [private repository](https://github.com/pinkwerks/camflex-data) for now. However, a PDF with graphs of the data is available in the file `lens_analysis.pdf`.
 
 Special thanks to [Andy Davis](https://imag4media.com/) for supplying the data.
 
-## Working with the data (assuming you have permission)
+### Working with the data submodule (assuming you have permission)
 After cloning this repo you can get the camflex-data submodule like this:
 
 `git submodule update --init --recursive`
