@@ -38,7 +38,7 @@ To predict distortion values *K1* and *K2* you need to provide a camera's sensor
 `python3 run-onnx.py -k1 .\models\ARRI-ZEISS_Master_012mm_model_k1.onnx -k2 .\models\ARRI-ZEISS_Master_012mm_model_k2.onnx -W 1.35 -H 1 -d 4`
 
 ## Data
-The data is housed in a [private repository](https://github.com/pinkwerks/camflex-data) for now. However, a PDF with graphs of the data is available in the file `lens_analysis.pdf`.
+The data is housed in a [private repository](https://github.com/pinkwerks/camflex-data) for now. However, a PDF with graphs of the data is available in the file [lens_analysis.pdf](lens_analysis.pdf).
 
 Special thanks to [Andy Davis](https://imag4media.com/) for collecting, organizing, and supplying the initial data that inspired me to try this.
 
