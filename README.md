@@ -38,3 +38,16 @@ To predict distortion values K1 and K2 you need to proved a camera's sensor widt
 The data is housed in a [private repository](https://github.com/pinkwerks/camflex-data) for now. However, a PDF with graphs of the data is availabe in the file `lens_analysis.pdf`.
 
 Special thanks to [Andy Davis](https://imag4media.com/) for supplying the data.
+
+## Working with the data (assuming you have permission)
+After cloning this repo you can get the camflex-data submodule like this:
+
+`git submodule update --init --recursive`
+
+Get status:
+
+`git submodule status`
+
+And update it like this:
+
+`git submodule update --remote`
