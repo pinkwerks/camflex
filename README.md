@@ -30,12 +30,12 @@ To train or run inference on the ONNX models from the command line you'll need [
 ## Try out the models from the command line
 You can find the trained ONNX models in the `models` subdirectory. Run this to get help.
 
-`python3 run-onnx.py`
+`python3 PredictDistortion.py`
 
 To predict distortion values *K1* and *K2* you need to provide a camera's sensor-width and sensor-height in **CENTIMETERS**. Plus, you must provide the depth in **METERS**.
 
-### run-onnx.py example
-`python3 run-onnx.py -k1 .\models\ARRI-ZEISS_Master_012mm_model_k1.onnx -k2 .\models\ARRI-ZEISS_Master_012mm_model_k2.onnx -W 1.35 -H 1 -d 4`
+### Predict distortion example
+`python3 PredictDistortion.py -k1 .\models\ARRI-ZEISS_Master_012mm_model_k1.onnx -k2 .\models\ARRI-ZEISS_Master_012mm_model_k2.onnx -W 1.35 -H 1 -d 4`
 
 ## Data
 The data is housed in a [private repository](https://github.com/pinkwerks/camflex-data) for now. However, a PDF with graphs of the data is available in the file [lens_analysis.pdf](lens_analysis.pdf).
