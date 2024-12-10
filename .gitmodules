@@ -1,3 +1,3 @@
-[submodule "data"]
-	path = data
+[submodule "camflex-data"]
+	path = camflex-data
 	url = https://github.com/pinkwerks/camflex-data.git
