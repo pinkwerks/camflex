@@ -27,5 +27,11 @@ def main():
         for dim in output_tensor.type.tensor_type.shape.dim:
             print(f"  - Dimension: {dim.dim_value}")
 
+    # Look for feature names (often stored as metadata)
+    metadata = model.metadata_props
+    print("\nMetadata Properties:")
+    for prop in metadata:
+        print(f"{prop.key}: {prop.value}")
+
 if __name__ == "__main__":
     main()

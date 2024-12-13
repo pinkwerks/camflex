@@ -1,35 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Camflex - Predict Distortion</title>
+  <title>Camflex - Convert distortion</title>
   <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
     }
+
     label {
       display: block;
       margin: 10px 0 5px;
     }
-    select, input, button {
+
+    select,
+    input,
+    button {
       padding: 10px;
       margin-bottom: 20px;
       width: 100%;
       max-width: 400px;
     }
+
     canvas {
       margin-top: 20px;
       max-width: 100%;
     }
   </style>
 </head>
+
 <body>
-  <h1>Camflex - Predict lens distortion</h1>
+  <h1>Camflex - Convert lens distortion</h1>
 
   <form id="inferenceForm">
+    <label for="k1">K1</label>
+    <input type="number" id="k1" placeholder="Enter K1" required>
+
+    <label for="k2">K2</label>
+    <input type="number" id="k2" placeholder="Enter K2" required>
+
     <label for="camera">Camera presets</label>
     <select id="camera">
       <option value="">Select a camera</option>
@@ -124,7 +137,7 @@
       option.textContent = lens;
       lensSelect.appendChild(option);
     });
-    
+
     // Prefill sensor width and height based on selected camera
     cameraSelect.addEventListener("change", () => {
       const selectedCamera = cameraSelect.value;
@@ -135,7 +148,11 @@
         sensorWidthInput.value = "";
         sensorHeightInput.value = "";
       }
+      // Trigger change event to ensure values are recognized
+      sensorWidthInput.dispatchEvent(new Event("input"));
+      sensorHeightInput.dispatchEvent(new Event("input"));
     });
+
 
     // Prefill focal length based on lens selection
     lensSelect.addEventListener("change", () => {
@@ -146,49 +163,67 @@
       } else {
         document.getElementById("focalLength").value = "";
       }
+      // Trigger change event to ensure values are recognized
+      document.getElementById("focalLength").dispatchEvent(new Event("input"));
     });
+
 
     // Load ONNX Model
     let session;
     async function loadModel() {
       // Assuming 'model.onnx' is hosted at the same location
-      session = await ort.InferenceSession.create('./lens_model_50mm_k1.onnx');
+      session = await ort.InferenceSession.create('./50mm_k1.onnx');
     }
 
     loadModel().catch(console.error);
 
     document.getElementById("runInference").addEventListener("click", async () => {
-    try {
+      try {
+        // Re-read values to ensure updates from presets are applied
+        const k1 = parseFloat(document.getElementById("k1").value);
+        const k2 = parseFloat(document.getElementById("k2").value);
         const sensorWidth = parseFloat(document.getElementById("sensorWidth").value);
         const sensorHeight = parseFloat(document.getElementById("sensorHeight").value);
         const focalLength = parseFloat(document.getElementById("focalLength").value);
         const distance = parseFloat(document.getElementById("distance").value);
-        const camera = document.getElementById("camera").value;
-        const lens = document.getElementById("lens").value;
 
-        // Ensure all inputs are valid numbers
-        if (isNaN(sensorWidth) || isNaN(sensorHeight) || isNaN(focalLength) || isNaN(distance)) {
-            throw new Error("All input fields must be filled with valid numbers.");
+        // Validate inputs
+        if (
+          isNaN(k1) || isNaN(k2) ||
+          isNaN(sensorWidth) || isNaN(sensorHeight) ||
+          isNaN(focalLength) || isNaN(distance)
+        ) {
+          throw new Error("All input fields must be filled with valid numbers.");
         }
 
         // Prepare the input tensor
-        const inputData = new Float32Array([sensorWidth, sensorHeight, focalLength, distance, /* Add other inputs */]);
+        const inputData = new Float32Array([
+          focalLength, // f0
+          k1,          // f1
+          k2,          // f2
+          sensorWidth, // f3
+          sensorHeight,// f4
+          distance     // f5
+        ]);
         const batchSize = 1; // Single sample
         const inputTensor = new ort.Tensor('float32', inputData, [batchSize, 6]);
 
         // Run inference
-        const feeds = { "float_input": inputTensor };
+        const feeds = { "scaler_float_input": inputTensor };
         const results = await session.run(feeds);
 
         // Process the output
-        const outputData = results["variable"].data; // Assuming output name is "variable"
-        document.getElementById("output").textContent = `Output: ${outputData}`;
-    } catch (error) {
+        const outputData = results["xgb_variable"].data;
+        document.getElementById("output").textContent = `K1: ${outputData}`;
+      } catch (error) {
         console.error(error);
         document.getElementById("output").textContent = "Error running inference. See console for details.";
-    }
-});
+      }
+    });
+
+
 
   </script>
 </body>
+
 </html>
