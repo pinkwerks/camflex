@@ -143,12 +143,17 @@ function parseAndValidateInt(inputFieldId, min = -Infinity, max = Infinity) {
 
 
 
-
+// Utility function to load ONNX model and run inference
+async function loadAndRunModel(modelPath, inputValues) {
+    const session = await ort.InferenceSession.create(modelPath);
+    const inputTensor = new ort.Tensor('float32', new Float32Array(inputValues), [1, 5]);
+    const results = await session.run({ "scaler_float_input": inputTensor });
+    return results["xgb_variable"].data[0];
+}
 
 // Run inference on button click
 runButton.addEventListener("click", async () => {
     try {
-
         // Validate and prepare input data
         const values = inputFeatures.map(id => {
             const result = parseAndValidateFloat(id);
@@ -158,9 +163,7 @@ runButton.addEventListener("click", async () => {
 
         // Retrieve and validate focal length
         const focalLengthResult = parseAndValidateInt("focalLength", 1);
-        if (!focalLengthResult.valid) {
-            throw new Error(focalLengthResult.error || "Invalid focal length.");
-        }
+        if (!focalLengthResult.valid) throw new Error(focalLengthResult.error || "Invalid focal length.");
         const focalLength = focalLengthResult.value;
 
         // Validate lens availability
@@ -168,19 +171,19 @@ runButton.addEventListener("click", async () => {
             throw new Error(`No model available for ${focalLength}mm.`);
         }
 
-        // Load ONNX model
-        const modelPath = `./${focalLength}mm_k1.onnx`;
-        const session = await ort.InferenceSession.create(modelPath);
-
-        // Prepare input tensor
-        const inputTensor = new ort.Tensor('float32', new Float32Array(values), [1, 5]);
-        const results = await session.run({ "scaler_float_input": inputTensor });
-        const outputData = results["xgb_variable"].data[0];
+        // Run inference for K1 and K2
+        const modelPathBase = `./${focalLength}mm`;
+        const [outputData1, outputData2] = await Promise.all([
+            loadAndRunModel(`${modelPathBase}_k1.onnx`, values),
+            loadAndRunModel(`${modelPathBase}_k2.onnx`, values)
+        ]);
 
         // Display the result
-        outputElement.textContent = `K1: ${outputData.toFixed(4)}`;
+        outputElement.textContent = `K1: ${outputData1.toFixed(4)} K2: ${outputData2.toFixed(4)}`;
+
     } catch (error) {
         outputElement.textContent = `Error: ${error.message || "An unexpected error occurred."}`;
     }
 });
+
 
