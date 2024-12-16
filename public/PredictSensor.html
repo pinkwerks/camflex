@@ -6,31 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Camflex - Convert distortion</title>
   <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-    }
-
-    label {
-      display: block;
-      margin: 10px 0 5px;
-    }
-
-    select,
-    input,
-    button {
-      padding: 10px;
-      margin-bottom: 20px;
-      width: 100%;
-      max-width: 400px;
-    }
-
-    canvas {
-      margin-top: 20px;
-      max-width: 100%;
-    }
-  </style>
+  <link rel="stylesheet" href="PredictSensor.css">
 </head>
 
 <body>
@@ -59,7 +35,7 @@
       <option value="">Select a lens</option>
     </select>
 
-    <label for="focalLength">Focal focalLength (cm)</label>
+    <label for="focalLength">Focal length (mm)</label>
     <input type="number" id="focalLength" placeholder="Enter sensor height in cm" required>
 
     <label for="distance">Distance (cm)</label>
@@ -73,157 +49,7 @@
 
   <canvas id="fisheyeCanvas"></canvas>
 
-  <script>
-    const cameraData = {
-      "Alexa 35 3k": { sensorW: 2.021926, sensorH: 1.695064 },
-      "Alexa 35 HD": { sensorW: 2.488889, sensorH: 1.4 },
-      "Alexa 35 (open gate)": { sensorW: 2.799084, sensorH: 1.921941 },
-      "Alexa 65 (open gate)": { sensorW: 5.413059, sensorH: 2.558 },
-      "Alexa LF HD": { sensorW: 3.168, sensorH: 1.782 },
-      "Alexa LF (open gate)": { sensorW: 3.669656, sensorH: 2.554239 },
-      "Alexa Mini (open gate)": { sensorW: 2.825342, sensorH: 1.816999 },
-      "Alexa SXT 2.8k": { sensorW: 2.376, sensorH: 1.782 },
-      "PANAVISION DXL2 (full-frame)": { sensorW: 2.048, sensorH: 1.08 },
-      "PANAVISION DXL2 HD": { sensorW: 2.88, sensorH: 1.62 },
-      "PANAVISION DXL2 (open gate)": { sensorW: 4.232533, sensorH: 2.232 },
-      "PANAVISION DXL HD": { sensorW: 3.072, sensorH: 1.728 },
-      "RED_Dragon HD": { sensorW: 2.04, sensorH: 1.08 },
-      "RED_Dragon (full frame)": { sensorW: 3.072, sensorH: 1.58 },
-      "RED_MysteriumX S35": { sensorW: 2.765, sensorH: 1.3825 },
-      "RED_WeaponS35 HD": { sensorW: 1.577, sensorH: 0.86735 },
-      "RED_WeaponS35 (full frame)": { sensorW: 2.055822, sensorH: 1.076094 },
-      "RED_WeaponS35 (full frame)": { sensorW: 2.990231, sensorH: 1.57688 },
-      "SONY F55": { sensorW: 2.404144, sensorH: 1.26781 },
-      "SONY F65": { sensorW: 2.477075, sensorH: 1.30627 },
-      "SONY Venice2 (full frame)": { sensorW: 3.593332, sensorH: 2.395554 },
-      "SONY Venice2 5.8k": { sensorW: 2.410176, sensorH: 2.019854 }
-    };
-
-    const lensData = [
-      'ZEISS Supreme 15mm', 'ZEISS Supreme 18mm', 'ZEISS Supreme 21mm',
-      'ZEISS Supreme 25mm', 'ZEISS Supreme 29mm', 'ZEISS Supreme 35mm',
-      'ZEISS Supreme 50mm', 'ZEISS Supreme 85mm', 'ZEISS Supreme 100mm',
-      'ZEISS Supreme 135mm', 'ZEISS Supreme 150mm', 'ZEISS Supreme 200mm',
-      'ZEISS CP3 15mm', 'ZEISS CP3 18mm', 'ZEISS CP3 21mm', 'ZEISS CP3 25mm',
-      'ZEISS CP3 28mm', 'ZEISS CP3 35mm', 'ZEISS CP3 50mm', 'ZEISS CP3 85mm',
-      'ZEISS CP3 100mm', 'ZEISS CP3 135mm', 'ZEISS CP2-SS 35mm',
-      'ZEISS CP2 15mm', 'ZEISS CP2 MACRO 50mm', 'ARRIFLEX-ZEISS MK 18mm',
-      'ARRIFLEX-ZEISS MK 25mm', 'ARRIFLEX-ZEISS MK 35mm', 'ARRIFLEX-ZEISS MK 50mm',
-      'ARRIFLEX-ZEISS MK 65mm', 'ARRIFLEX-ZEISS MK 85mm', 'ARRI-ZEISS Master 12mm',
-      'ARRI-ZEISS Master 14mm', 'ARRI-ZEISS Master 16mm', 'ARRI-ZEISS Master 18mm',
-      'ARRI-ZEISS Master 21mm', 'ARRI-ZEISS Master 25mm', 'ARRI-ZEISS Master 27mm',
-      'ARRI-ZEISS Master 32mm', 'ARRI-ZEISS Master 35mm', 'ARRI-ZEISS Master 40mm',
-      'ARRI-ZEISS Master 65mm', 'ARRI-ZEISS Master 75mm', 'ARRI-ZEISS Master 100mm',
-      'ARRI-ZEISS Master 135mm', 'ARRI-ZEISS Master 150mm', 'ARRI-ZEISS Master MACRO 100mm'
-    ];
-
-    const cameraSelect = document.getElementById("camera");
-    const sensorWidthInput = document.getElementById("sensorWidth");
-    const sensorHeightInput = document.getElementById("sensorHeight");
-    const lensSelect = document.getElementById("lens");
-
-    // Populate camera dropdown, sorted by camera name
-    Object.keys(cameraData).sort().forEach(camera => {
-      const option = document.createElement("option");
-      option.value = camera;
-      option.textContent = camera;
-      cameraSelect.appendChild(option);
-    });
-
-    // Populate lens dropdown, sorted by lens name
-    lensData.sort().forEach(lens => {
-      const option = document.createElement("option");
-      option.value = lens;
-      option.textContent = lens;
-      lensSelect.appendChild(option);
-    });
-
-    // Prefill sensor width and height based on selected camera
-    cameraSelect.addEventListener("change", () => {
-      const selectedCamera = cameraSelect.value;
-      if (selectedCamera && cameraData[selectedCamera]) {
-        sensorWidthInput.value = cameraData[selectedCamera].sensorW.toFixed(3);
-        sensorHeightInput.value = cameraData[selectedCamera].sensorH.toFixed(3);
-      } else {
-        sensorWidthInput.value = "";
-        sensorHeightInput.value = "";
-      }
-      // Trigger change event to ensure values are recognized
-      sensorWidthInput.dispatchEvent(new Event("input"));
-      sensorHeightInput.dispatchEvent(new Event("input"));
-    });
-
-
-    // Prefill focal length based on lens selection
-    lensSelect.addEventListener("change", () => {
-      const selectedLens = lensSelect.value;
-      const focalMatch = selectedLens.match(/(\d+)mm$/);
-      if (focalMatch) {
-        document.getElementById("focalLength").value = parseInt(focalMatch[1], 10);
-      } else {
-        document.getElementById("focalLength").value = "";
-      }
-      // Trigger change event to ensure values are recognized
-      document.getElementById("focalLength").dispatchEvent(new Event("input"));
-    });
-
-
-    // Load ONNX Model
-    let session;
-    async function loadModel() {
-      // Assuming 'model.onnx' is hosted at the same location
-      session = await ort.InferenceSession.create('./50mm_k1.onnx');
-    }
-
-    loadModel().catch(console.error);
-
-    document.getElementById("runInference").addEventListener("click", async () => {
-      try {
-        // Re-read values to ensure updates from presets are applied
-        const k1 = parseFloat(document.getElementById("k1").value);
-        const k2 = parseFloat(document.getElementById("k2").value);
-        const sensorWidth = parseFloat(document.getElementById("sensorWidth").value);
-        const sensorHeight = parseFloat(document.getElementById("sensorHeight").value);
-        const focalLength = parseFloat(document.getElementById("focalLength").value);
-        const distance = parseFloat(document.getElementById("distance").value);
-
-        // Validate inputs
-        if (
-          isNaN(k1) || isNaN(k2) ||
-          isNaN(sensorWidth) || isNaN(sensorHeight) ||
-          isNaN(focalLength) || isNaN(distance)
-        ) {
-          throw new Error("All input fields must be filled with valid numbers.");
-        }
-
-        // Prepare the input tensor
-        const inputData = new Float32Array([
-          focalLength, // f0
-          k1,          // f1
-          k2,          // f2
-          sensorWidth, // f3
-          sensorHeight,// f4
-          distance     // f5
-        ]);
-        const batchSize = 1; // Single sample
-        const inputTensor = new ort.Tensor('float32', inputData, [batchSize, 6]);
-
-        // Run inference
-        const feeds = { "scaler_float_input": inputTensor };
-        const results = await session.run(feeds);
-
-        // Process the output
-        const outputData = results["xgb_variable"].data;
-        document.getElementById("output").textContent = `K1: ${outputData}`;
-      } catch (error) {
-        console.error(error);
-        document.getElementById("output").textContent = "Error running inference. See console for details.";
-      }
-    });
-
-
-
-  </script>
+  <script src="PredictSensor.js"></script>
 </body>
 
 </html>

@@ -3,16 +3,13 @@ import joblib
 import numpy as np
 import argparse
 
-def run_inference(k1_model_path, k2_model_path, scaler_path, focal_length, k1, k2, sensor_width, sensor_height, distance):
+def run_inference(model_path, scaler, focal_length, k1, k2, sensor_width, sensor_height, distance):
     # Load the models and scaler
     print("Loading models and scaler...")
     k1_model = xgb.Booster()
-    k1_model.load_model(k1_model_path)
+    k1_model.load_model(model_path)
 
-    k2_model = xgb.Booster()
-    k2_model.load_model(k2_model_path)
-
-    scaler = joblib.load(scaler_path)
+    scaler = joblib.load(scaler)
 
     # Prepare the input features
     features = np.array([[focal_length, k1, k2, sensor_width, sensor_height, distance]])
@@ -32,17 +29,14 @@ def run_inference(k1_model_path, k2_model_path, scaler_path, focal_length, k1, k
 
     # Run predictions
     print("Running predictions...")
-    k1_prediction = k1_model.predict(features_dmatrix)
-    k2_prediction = k2_model.predict(features_dmatrix)
+    prediction = k1_model.predict(features_dmatrix)
 
-    print(f"Predicted K1: {k1_prediction[0]}")
-    print(f"Predicted K2: {k2_prediction[0]}")
+    print(f"Predicted: {prediction[0]}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run inference using XGBoost JSON models and scaler.")
-    parser.add_argument("--k1_model", type=str, required=True, help="Path to the K1 model JSON file.")
-    parser.add_argument("--k2_model", type=str, required=True, help="Path to the K2 model JSON file.")
-    parser.add_argument("--scaler", type=str, required=True, help="Path to the scaler joblib file.")
+    parser.add_argument("--model", type=str, required=True, help="Path to the K1 model JSON file.")
+    parser.add_argument("--scaler", type=str, required=True, help="Path to the K1 scaler joblib file.")
     parser.add_argument("--focal_length", type=float, required=True, help="Focal length feature.")
     parser.add_argument("--k1", type=float, required=True, help="K1 feature.")
     parser.add_argument("--k2", type=float, required=True, help="K2 feature.")
@@ -52,9 +46,9 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    run_inference(
-        args.k1_model, args.k2_model,
-        args.scaler,
+    prediction = run_inference(
+        args.model, args.k2_model,
+        args.scaler, args.k2_scaler,
         args.focal_length, args.k1, args.k2,
         args.sensor_width,args.sensor_height, args.distance
     )

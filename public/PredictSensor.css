@@ -1,0 +1,23 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+
+label {
+  display: block;
+  margin: 10px 0 5px;
+}
+
+select,
+input,
+button {
+  padding: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 400px;
+}
+
+canvas {
+  margin-top: 20px;
+  max-width: 100%;
+}
