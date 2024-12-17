@@ -22,24 +22,54 @@ Use machine learning to predict [lens distortion](https://en.wikipedia.org/wiki/
 - SONY F65
 - SONY Venice 2
 
-## Requirements
+## Quality
+I'm no data scientist. Graphs of the predictions can be found near the bottom of the [notebook](Camflex.ipynb). Some are better than others. I was inspired to help out VFX artists who had plates and camera data - but no grids. Typically, you'd film the distortion grids and run them through something like [3DE](https://www.3dequalizer.com/) to get the highest quality results.
+
+## Get the requirements
 To train or run inference on the ONNX models from the command line, you'll need [Python 3](https://www.python.org/downloads/) and some libraries.
 
 `python3 -m pip install -r requirements.txt`
 
-## Quality
-I'm no data scientist. Graphs of the predictions can be found near the bottom of the [notebook](Camflex.ipynb). Some are better than others. I was inspired to help out VFX artists who had plates and camera data - but no grids. Typically, you'd film the distortion grids and run them through something like [3DE](https://www.3dequalizer.com/) to get the highest quality results.
-
 ## Try out the models from the command line
-You can find the trained ONNX models in the `models` subdirectory. Run this to get help.
+You can find the trained ONNX models in the [`models`](models) subdirectory. There are 2 main categories: *focal length models* and *lens models*. There are separate models for each feature (K1, K2) for prediction. You always make predictions for a focus in distance centimeters.
 
-`python3 PredictDistortion.py`
+**Lens models** make predictions for a specific lens. These are models named by manufacturer at specific focal length. An "ARRI / ZEISS Master 50mm", for example.
 
-To predict distortion values *K1* and *K2*, you need to provide a camera's sensor width and sensor height in **CENTIMETERS**. Plus, you must provide the depth in **METERS**.
+**Focal length models** let you predict distortion for a family of lens models, if you have the camera sensor sizes.
 
-### Predict distortion example
-`python3 PredictDistortion.py -k1 .\models\ARRI-ZEISS_Master_012mm_model_k1.onnx -k2 .\models\ARRI-ZEISS_Master_012mm_model_k2.onnx -W 1.35 -H 1 -d 4`
+Run `python3 ConvertDistortionONNX.py -h` or `python3 PredictDistortion.py -h` for help.
 
+### Use a ***focal length model*** to retarget K1 and K2 (using exising distortion to a new camera 1m away)
+If you already have **K1** and **K2**, you can convert those values using a **focal length model** (`50mm_k1.onnx` for example) a distance and the target sensor size. This is like swapping camera bodies when you already have a lens and it's distortion values.
+```
+python3 ConvertDistortionONNX.py \
+    -k1m .\models\50mm_k1.onnx \
+    -k2m .\models\50mm_k2.onnx \
+    -k1 0.014903 \
+    -k2 -0.000562 \
+    -sw 2.799 \
+    -sh 1.9218828124999998 \
+    -d 100
+```
+
+### Use a ***lens model*** to predict K1 and K2 (for a specific lens, 1m away)
+If you know the physical characteristics of your camera and you want distortion values for a specific lens (like the ARRI-ZEISS_Master_050mm) you can apply a **lens model**.
+
+```
+python3 PredictDistortionONNX.py \
+    -k1m .\models\ARRI-ZEISS_Master_050mm_k1.onnx \
+    -k2m .\models\ARRI-ZEISS_Master_050mm_k2.onnx \
+    -sw 2.799 \
+    -sh 1.92 \
+    -d 100
+```
+## Try out in web browser
+Ensure [node.js](https://nodejs.org/en/download/prebuilt-installer) is installed.
+```
+cd public
+npm install && npx http-server
+```
+Then visit url printed in console. Likely this one [http://127.0.0.1:8080/PredictSensor.html](http://127.0.0.1:8080/PredictSensor.html)
 ## Data
 The data is housed in a [private repository](https://github.com/pinkwerks/camflex-data) for now. However, a PDF with graphs of the data is available in the file [lens_analysis.pdf](lens_analysis.pdf).
 
