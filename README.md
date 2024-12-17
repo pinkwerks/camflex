@@ -14,7 +14,8 @@ Use machine learning to predict [lens distortion](https://en.wikipedia.org/wiki/
 - Alexa LF
 - Alexa Mini
 - Alexa SXT
-- PANAVISION DXL
+- Panavision DXL
+- Panavision DXL
 - RED Dragon
 - RED Mysterium X
 - RED Weapon S35
