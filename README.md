@@ -68,9 +68,10 @@ python3 PredictDistortionONNX.py \
 Ensure [node.js](https://nodejs.org/en/download/prebuilt-installer) is installed.
 ```
 cd public
-npm install && npx http-server
+npx http-server
 ```
-Then visit url printed in console. Likely this one [http://127.0.0.1:8080/PredictSensor.html](http://127.0.0.1:8080/PredictSensor.html)
+Then visit url printed in console.
+
 ## Data
 The data is housed in a [private repository](https://github.com/pinkwerks/camflex-data) for now. However, a PDF with graphs of the data is available in the file [lens_data.pdf](lens_data.pdf).
 

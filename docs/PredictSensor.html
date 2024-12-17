@@ -4,52 +4,99 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Camflex - Convert distortion</title>
+
+  <!-- release -->
+  <link rel="stylesheet" href="http://pinkwerks.github.io/measured-font.css">
+  <link rel="stylesheet" href="http://pinkwerks.github.io/measured-dark.css">
+  <link rel="icon" href="http://pinkwerks.github.io/favicon.ico" type="image/x-icon">
+
+  <!-- testing -->
+  <link rel="stylesheet" href="measured-font.css">
+  <link rel="stylesheet" href="measured-dark.css">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Neuton:ital,wght@0,200;0,300;0,400;0,700;0,800;1,400&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Tilt+Prism&display=swap"
+    rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
-  <link rel="stylesheet" href="style.css">
+
+  <title>Camflex - Convert distortion</title>
 </head>
 
 <body>
-  <h1>Camflex - Convert lens distortion</h1>
-
+  <nav><a href="index.html">All Camflex models</a></nav>
+  <h1>Camflex - Convert Lens Distortion</h1>
   <form id="inferenceForm">
-    <label for="k1">K1</label>
-    <input type="number" id="k1" placeholder="Enter K1" required>
+    <h2> Inputs</h2>
+    <div class="col section">
+      <p>Pre-existing distortion coefficients.</p>
+      <div class="row">
+        <div class="row">
+          <label for="k1">K1</label>
+          <input type="number" id="k1" placeholder="Enter K1" step="0.01" required>
+        </div>
+        <div class="row">
+          <label for="k2">K2</label>
+          <input type="number" id="k2" placeholder="Enter K2" step="0.01" required>
+        </div>
+      </div>
+    </div>
 
-    <label for="k2">K2</label>
-    <input type="number" id="k2" placeholder="Enter K2" required>
+    <div class="col section">
+      <div class="row">
 
-    <label for="camera">Camera presets</label>
-    <select id="camera">
-      <option value="">Select a camera</option>
-    </select>
+        <label for="camera">Camera presets</label>
+        <select id="camera">
+          <option value="">Select a camera</option>
+        </select>
+      </div>
 
-    <label for="sensorWidth">Sensor Width (cm)</label>
-    <input type="number" id="sensorWidth" placeholder="Enter sensor width in cm" required>
+      <div class="row">
+        <label for="sensorWidth">Sensor width (cm)</label>
+        <input type="number" id="sensorWidth" placeholder="Enter width in cm" step="0.01" required>
+        <label for="sensorHeight">Sensor height (cm)</label>
+        <input type="number" id="sensorHeight" placeholder="Enter height in cm" step="0.01" required>
+      </div>
+    </div>
 
-    <label for="sensorHeight">Sensor Height (cm)</label>
-    <input type="number" id="sensorHeight" placeholder="Enter sensor height in cm" required>
+    <div class="col section">
+      <div class="row">
 
-    <label for="lens">Lens presets</label>
-    <select id="lens">
-      <option value="">Select a lens</option>
-    </select>
+        <label for="lens">Lens Presets</label>
+        <select id="lens">
+          <option value="">Select a lens</option>
+        </select>
+        <div class="row">
+          <label for="focalLength">Focal length (mm)</label>
+          <input type="number" id="focalLength" placeholder="Enter focal length in mm" required>
+        </div>
+      </div>
 
-    <label for="focalLength">Focal length (mm)</label>
-    <input type="number" id="focalLength" placeholder="Enter sensor height in cm" required>
 
-    <label for="distance">Distance (cm)</label>
-    <input type="number" id="distance" placeholder="Enter distance in cm" required>
+    </div>
 
-    <button type="button" id="runInference">Run Inference</button>
+    <div class="col section">
+      <div class="row">
+        <label for="distance">Distance (cm)</label>
+        <input type="number" id="distance" placeholder="Enter distance in cm" required>
+      </div>
+    </div>
+
+    <div class="col">
+      <button type="button" id="runInference">Predict</button>
+    </div>
+
+    <h2>Output</h2>
+    <div class="col section">
+      <output id="output">Waiting for input...</output>
+      <canvas id="fisheyeCanvas"></canvas>
+      <script src="PredictSensor.js"></script>
+    </div>
   </form>
 
-  <h2>Output</h2>
-  <pre id="output">Waiting for input...</pre>
 
-  <canvas id="fisheyeCanvas"></canvas>
-
-  <script src="PredictSensor.js"></script>
 </body>
 
 </html>
