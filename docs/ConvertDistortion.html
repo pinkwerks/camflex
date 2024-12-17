@@ -32,7 +32,7 @@
   <form id="inferenceForm">
     <h2> Inputs</h2>
     <div class="col section">
-      <p>Pre-existing distortion coefficients.</p>
+      <p>Pre-existing lens distortion coefficients.</p>
       <div class="row">
         <div class="row">
           <label for="k1">K1</label>
@@ -92,8 +92,7 @@
     <h2>Output</h2>
     <div class="col section">
       <output id="output">Waiting for input...</output>
-      <canvas id="fisheyeCanvas"></canvas>
-      <script src="PredictSensor.js"></script>
+      <script src="ConvertDistortion.js"></script>
     </div>
   </form>
 
