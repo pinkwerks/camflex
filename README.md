@@ -72,7 +72,7 @@ npm install && npx http-server
 ```
 Then visit url printed in console. Likely this one [http://127.0.0.1:8080/PredictSensor.html](http://127.0.0.1:8080/PredictSensor.html)
 ## Data
-The data is housed in a [private repository](https://github.com/pinkwerks/camflex-data) for now. However, a PDF with graphs of the data is available in the file [lens_analysis.pdf](lens_analysis.pdf).
+The data is housed in a [private repository](https://github.com/pinkwerks/camflex-data) for now. However, a PDF with graphs of the data is available in the file [lens_data.pdf](lens_data.pdf).
 
 Special thanks to [Andy Davis](https://imag4media.com/) for collecting, organizing, and supplying the initial data that inspired me to try this.
 
