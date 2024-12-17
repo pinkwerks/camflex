@@ -129,8 +129,8 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-# Style sheets
-docs/measured-dark.css
-docs/measured-font.css
-docs/measured-light.css
-docs/favicon.ico
+# Style sheet links
+measured-dark.css
+measured-font.css
+measured-light.css
+favicon.ico
