@@ -1,23 +1,48 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 20px;
-}
+    /* Dark theme with color blindness accessibility */
 
-label {
-  display: block;
-  margin: 10px 0 5px;
-}
+    body {
+        background-color: #101010;
+        color: #EBEBEB;
+        font-family: Arial, sans-serif;
+    }
 
-select,
-input,
-button {
-  padding: 10px;
-  margin-bottom: 20px;
-  width: 100%;
-  max-width: 400px;
-}
+    a {
+        color: #BB86FC;
+        text-decoration: none;
+    }
 
-canvas {
-  margin-top: 20px;
-  max-width: 100%;
-}
+    a:focus, a:hover {
+        color: #3700B3;
+    }
+
+    button {
+        background-color: #03DAC6;
+        color: #000000;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+
+    button:focus, button:hover {
+        background-color: #018786;
+    }
+
+    header, footer {
+        background-color: #1F1F1F;
+        color: #E0E0E0;
+        padding: 20px;
+        text-align: center;
+    }
+
+    main {
+        padding: 20px;
+    }
+
+    /* Additional styles for color blindness accessibility */
+    .color-blind-safe {
+        color: #FFD700; /* Yellow */
+    }
+
+    .color-blind-safe-bg {
+        background-color: #FFD700; /* Yellow */
+    }
