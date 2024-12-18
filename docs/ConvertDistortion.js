@@ -4,6 +4,9 @@ const inputFeatures = ["k1", "k2", "sensorWidth", "sensorHeight", "distance"];
 
 // Run inference on button click
 common.runButton.addEventListener("click", async () => {
+    // Clear the output element
+    outputElement.textContent = ""; // Clear previous output
+    
     try {
         // Validate and prepare input data
         const values = inputFeatures.map(id => {

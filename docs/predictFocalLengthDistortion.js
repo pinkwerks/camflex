@@ -29,6 +29,9 @@ setupSliderAndDistanceListeners(slider, distanceInput);
 
 // Run inference on button click
 runButton.addEventListener("click", async () => {
+    // Clear the output element
+    outputElement.textContent = ""; // Clear previous output
+
     try {
         // Validate and prepare input data
         const values = inputFeatures.map(id => {
