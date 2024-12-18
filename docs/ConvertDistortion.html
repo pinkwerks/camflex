@@ -21,6 +21,8 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Neuton:ital,wght@0,200;0,300;0,400;0,700;0,800;1,400&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Tilt+Prism&display=swap"
     rel="stylesheet">
+  
+  <!-- ONNX -->
   <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
 
   <title>Camflex - Convert distortion</title>
@@ -80,13 +82,14 @@
 
     <div class="col section">
       <div class="row">
-        <label for="distance">Distance (cm)</label>
+        <label for="distance">Focus distance</label>
+        <input type="range" id="slider" min="1" max="10000" value="100" step="1" required>
         <input type="number" id="distance" placeholder="Enter distance in cm" required>
       </div>
     </div>
 
     <div class="col">
-      <button type="button" id="runInference">Predict</button>
+      <button type="button" id="runInference">Convert</button>
     </div>
 
     <h2>Output</h2>
