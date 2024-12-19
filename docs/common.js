@@ -45,6 +45,15 @@ const lensData = [
 
 const minValue = 1, maxValue = 10000, minSlider = 0, maxSlider = 10000;
 
+function formatLensString(input) {
+    return input
+        .replace(/\s+/g, '_')                 // Replace spaces with underscores
+        .replace(/(\d+)mm/, (match, num) =>  // Match number followed by "mm"
+            `${num.padStart(3, '0')}mm`      // Pad the number to 3 digits
+        )
+        .replace(/_+/g, '_');                // Ensure no double underscores
+}
+
 function populateDropdown(selectElementId, data, isObject = false) {
     const dropdown = document.getElementById(selectElementId);
     if (!dropdown) return;
@@ -114,6 +123,7 @@ export {
     cameraData,
     lensData,
     populateDropdown,
+    formatLensString,
     linearToLogarithmic,
     logarithmicToLinear,
     parseAndValidateNumber,
@@ -126,6 +136,7 @@ export default {
     cameraData,
     lensData,
     populateDropdown,
+    formatLensString,
     linearToLogarithmic,
     logarithmicToLinear,
     parseAndValidateNumber,

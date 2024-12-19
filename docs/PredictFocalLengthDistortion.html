@@ -21,9 +21,11 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Neuton:ital,wght@0,200;0,300;0,400;0,700;0,800;1,400&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Tilt+Prism&display=swap"
         rel="stylesheet">
+
+    <!-- ONNX -->
     <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
 
-    <title>Camflex - Predict Distortion</title>
+    <title>Camflex - Predict distortion</title>
 </head>
 
 <body>
@@ -36,7 +38,7 @@
         </ul>
     </nav>
 
-    <h1>Camflex - Predict Distortion (focal length model)</h1>
+    <h1>Camflex - Predict distortion (focal length model)</h1>
 
     <form id="inferenceForm">
         <h2>Inputs</h2>
@@ -44,7 +46,7 @@
         <!-- Camera Selection -->
         <div class="col section">
             <div class="row">
-                <label for="camera">Camera Presets</label>
+                <label for="camera">Camera presets</label>
                 <select id="camera">
                     <option value="">Select a camera</option>
                 </select>
@@ -52,7 +54,7 @@
 
             <div class="row">
                 <input type="number" id="sensorWidth" placeholder="Enter width" step="0.01" required>
-                <label for="sensorWidth">Sensor Width cm</label>
+                <label for="sensorWidth">Sensor idth cm</label>
             </div>
 
             <div class="row">

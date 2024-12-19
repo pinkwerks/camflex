@@ -49,9 +49,8 @@ runButton.addEventListener("click", async () => {
         const focalLengthValidation = common.validateFocalLength(focalLength);
         if (!focalLengthValidation.valid) throw new Error(focalLengthValidation.error);
 
-        const modelPathBase = `${focalLength}mm`;
-        const k1modelpath = `${modelPathBase}_fl_k1.onnx`;
-        const k2modelpath = `${modelPathBase}_fl_k2.onnx`;
+        const k1modelpath = `${focalLength}mm_fl_k1.onnx`;
+        const k2modelpath = `${focalLength}mm_fl_k2.onnx`;
 
         outputElement.textContent += `Loading models:\n${k1modelpath}\n${k2modelpath}\n`;
 
