@@ -30,6 +30,24 @@ Use machine learning to predict [lens distortion](https://en.wikipedia.org/wiki/
 ## Quality
 I'm no data scientist. Graphs of the predictions can be found near the bottom of the [notebook](Camflex.ipynb). Some are better than others. I was inspired to help out VFX artists who had plates and camera data - but no grids. Typically, you'd film the distortion grids and run them through something like [3DE](https://www.3dequalizer.com/) to get the highest quality results.
 
+## Data
+The data is housed in a [private repository](https://github.com/pinkwerks/camflex-data) for now. However, a PDF with graphs of the data is available in the file [lens_data.pdf](lens_data.pdf).
+
+Special thanks to [Andy Davis](https://imag4media.com/) for collecting, organizing, and supplying the initial data that inspired me to try this.
+
+### Working with the data submodule (assuming you have permission)
+After cloning this repo, you can get the camflex-data submodule like this:
+
+`git submodule update --init --recursive`
+
+Get status:
+
+`git submodule status`
+
+And update it like this:
+
+`git submodule update --remote`
+
 ## Get the requirements
 To train or run inference on the ONNX models from the command line, you'll need [Python 3](https://www.python.org/downloads/) and some libraries.
 
@@ -77,21 +95,3 @@ cd public
 npx http-server
 ```
 Then visit url printed in console.
-
-## Data
-The data is housed in a [private repository](https://github.com/pinkwerks/camflex-data) for now. However, a PDF with graphs of the data is available in the file [lens_data.pdf](lens_data.pdf).
-
-Special thanks to [Andy Davis](https://imag4media.com/) for collecting, organizing, and supplying the initial data that inspired me to try this.
-
-### Working with the data submodule (assuming you have permission)
-After cloning this repo, you can get the camflex-data submodule like this:
-
-`git submodule update --init --recursive`
-
-Get status:
-
-`git submodule status`
-
-And update it like this:
-
-`git submodule update --remote`
