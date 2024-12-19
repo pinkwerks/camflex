@@ -36,11 +36,13 @@ To train or run inference on the ONNX models from the command line, you'll need 
 `python3 -m pip install -r requirements.txt`
 
 ## Try out the models from the command line
-You can find the trained ONNX models in the [`models`](models) subdirectory. There are 2 main categories: *focal length models* and *lens models*. There are separate models for each feature (K1, K2) for prediction. You always make predictions for a focus in distance centimeters.
+You can find the trained ONNX models in the [`models`](models) subdirectory. There are 3 main categories: *conversion models*, *focal length models*, and *lens models*. There are separate models for each feature (K1, K2) for prediction. You always make predictions for a focus in distance centimeters.
 
-**Lens models** make predictions for a specific lens. These are models named by manufacturer at specific focal length. An "ARRI / ZEISS Master 50mm", for example.
+**Conversion models** let you predict distortion from pre-existing distortion values where you want to retarget the sensor and lens.
 
 **Focal length models** let you predict distortion for a family of lens models, if you have the camera sensor sizes.
+
+**Lens models** make predictions for a specific lens. These are models named by manufacturer at specific focal length. An "ARRI / ZEISS Master 50mm", for example.
 
 Run `python3 ConvertDistortionONNX.py -h` or `python3 PredictDistortion.py -h` for help.
 
@@ -48,8 +50,8 @@ Run `python3 ConvertDistortionONNX.py -h` or `python3 PredictDistortion.py -h` f
 If you already have **K1** and **K2**, you can convert those values using a **focal length model** (`50mm_k1.onnx` for example) a distance and the target sensor size. This is like swapping camera bodies when you already have a lens and it's distortion values.
 ```
 python3 ConvertDistortionONNX.py \
-    -k1m .\models\50mm_k1.onnx \
-    -k2m .\models\50mm_k2.onnx \
+    -k1m .\models\50mm_c_k1.onnx \
+    -k2m .\models\50mm_c_k2.onnx \
     -k1 0.014903 \
     -k2 -0.000562 \
     -sw 2.799 \
