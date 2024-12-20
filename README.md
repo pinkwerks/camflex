@@ -54,7 +54,7 @@ To train or run inference on the ONNX models from the command line, you'll need 
 `python3 -m pip install -r requirements.txt`
 
 ## Try out the models from the command line
-You can find the trained ONNX models in the [`models`](models) subdirectory. There are 3 main categories: *conversion models*, *focal length models*, and *lens models*. There are separate models for each feature (K1, K2) for prediction. You always make predictions for a focus in distance centimeters.
+You can find the trained ONNX models in the [`models`](models) subdirectory. There are 3 main categories: *conversion models*, *focal length models*, and *lens models*. There are separate models for each feature (K1, K2) for prediction. You always make predictions for a focus distance in centimeters.
 
 **Conversion models** let you predict distortion from pre-existing distortion values where you want to retarget the sensor and lens.
 
