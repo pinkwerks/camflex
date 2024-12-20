@@ -50,8 +50,8 @@ runButton.addEventListener("click", async () => {
         const focalLengthValidation = common.validateFocalLength(focalLength);
         if (!focalLengthValidation.valid) throw new Error(focalLengthValidation.error);
 
-        const k1modelpath = `./${focalLength}mm_c_k1.onnx`;
-        const k2modelpath = `./${focalLength}mm_c_k2.onnx`;
+        const k1modelpath = `models/${focalLength}mm_c_k1.onnx`;
+        const k2modelpath = `models/${focalLength}mm_c_k2.onnx`;
 
         outputElement.textContent += `Loading models:\n${k1modelpath}\n${k2modelpath}\n`;
 
@@ -65,6 +65,12 @@ runButton.addEventListener("click", async () => {
         outputElement.innerHTML += `<div>K1: ${outputData1.toFixed(4)}</div>`;
         outputElement.innerHTML += `<div>K2: ${outputData2.toFixed(4)}</div>`;
 
+        // Get the model image and display it
+        const modeimgpath = `models/${focalLength}mm_c.png`;
+        const img = document.createElement("img");
+        img.src = modeimgpath;
+        img.style.width = "100%";
+        outputElement.appendChild(img);
     } catch (error) {
         outputElement.innerHTML += `<div style="color: red;">Error: ${error.message || "An unexpected error occurred."}</div>`;
     }

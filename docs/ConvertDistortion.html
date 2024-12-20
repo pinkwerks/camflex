@@ -25,20 +25,22 @@
   <!-- ONNX -->
   <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
 
-  <title>Camflex - Convert distortion</title>
+  <title>Camflex - Convert existing distortion</title>
 </head>
 
 <body>
 
   <nav>
     <ul>
-      <li><a href="index.html">All Camflex Models</a></li>
+      <li><a href="index.html">All models</a></li>
+      <li><a href="FocalLengthDistortion.html">Focal length</a></li>
+      <li><a href="LensDistortion.html">Lens</a></li>
       <li><a href="https://github.com/pinkwerks/camflex">Camflex @ GitHub</a></li>
       <li><a href="https://github.com/pinkwerks/camflex/blob/main/lens_data.pdf">Lens data</a></li>
     </ul>
   </nav>
 
-  <h1>Camflex - Convert distortion</h1>
+  <h1>Camflex - Convert existing distortion</h1>
 
   <form id="inferenceForm">
     <h2>Inputs</h2>
@@ -47,12 +49,12 @@
     <div class="col section">
       <div class="row">
         <input type="number" id="k1" placeholder="Enter k1" step="0.01" required>
-        <label for="k1">Sensor Width cm</label>
+        <label for="k1">K1</label>
       </div>
 
       <div class="row">
         <input type="number" id="k2" placeholder="Enter k2" step="0.01" required>
-        <label for="k2">Sensor Height cm</label>
+        <label for="k2">K2</label>
       </div>
     </div>
 
