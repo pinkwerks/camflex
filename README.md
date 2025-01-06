@@ -1,9 +1,12 @@
 # Camflex
 Use machine learning to predict [lens distortion](https://en.wikipedia.org/wiki/Distortion_(optics)) parameters for lenses used in motion picture photography.
 
+![image](natron/distort.gif)
+
 ## Try it here!
 
 [Camflex](https://pinkwerks.github.io/camflex)
+
 
 ## Lenses sampled
 - ARRI / ZEISS Master
