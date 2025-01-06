@@ -57,11 +57,11 @@ To train or run inference on the ONNX models from the command line, you'll need 
 `python3 -m pip install -r requirements.txt`
 
 ## Try out the models from the command line
-You can find the trained ONNX models in the [`models`](models) subdirectory. There are 3 main categories: *conversion models*, *focal length models*, and *lens models*. There are separate models for each feature (K1, K2) for prediction. You always make predictions for a focus in distance centimeters.
+You can find the trained ONNX models in the [`models`](models) subdirectory. There are 3 main categories: *conversion models*, *focal length models*, and *lens models*. There are separate models for each feature (K1, K2) for prediction. You always make predictions for a focus distance in centimeters.
 
-**Conversion models** let you predict distortion from pre-existing distortion values where you want to retarget the sensor and lens.
+**Conversion models** let you predict from pre-existing distortion values where you want to retarget the sensor and/or lens.
 
-**Focal length models** let you predict distortion for a family of lens models, if you have the camera sensor sizes.
+**Focal length models** let you predict distortion for a family of lenses with the same focal length. For example, all 50mm lenses.
 
 **Lens models** make predictions for a specific lens. These are models named by manufacturer at specific focal length. An "ARRI / ZEISS Master 50mm", for example.
 
@@ -91,10 +91,10 @@ python3 PredictDistortionONNX.py \
     -sh 1.92 \
     -d 100
 ```
-## Try out in web browser
+## Try out in web browser locally
 Ensure [node.js](https://nodejs.org/en/download/prebuilt-installer) is installed.
 ```
-cd public
-npx http-server
+cd docs
+npx live-server
 ```
 Then visit url printed in console.
